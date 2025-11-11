@@ -2,4 +2,4 @@ flask
 scikit-learn
 joblib
 numpy
-pandas
+requests
