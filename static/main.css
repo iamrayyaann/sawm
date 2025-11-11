@@ -562,3 +562,144 @@ footer a {
 footer a:hover {
   opacity: 0.7;
 }
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem;
+  }
+
+  main, .container {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .hero {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+  }
+
+  .hero-times-container {
+    gap: 1rem;
+  }
+
+  .hero-time {
+    font-size: 2rem;
+  }
+
+  .hero-label {
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+  }
+
+  .hero-divider-vertical {
+    height: 80px;
+  }
+
+  .hydration-callout {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+  }
+
+  .hydration-value {
+    font-size: 2rem;
+  }
+
+  .modal-content {
+    min-width: 90%;
+    max-width: 100%;
+    margin: 1rem;
+  }
+
+  .settings-group {
+    gap: 0.5rem;
+  }
+
+  .location-input-wrapper {
+    gap: 0.4rem;
+  }
+
+  .gps-btn {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .settings-label {
+    font-size: 0.75rem;
+  }
+
+  .settings-group input,
+  .settings-group select {
+    font-size: 1rem;
+    padding: 0.6rem 0.8rem;
+  }
+
+  .btn-small {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  .hero {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  .hero-times-container {
+    gap: 0.75rem;
+  }
+
+  .hero-time {
+    font-size: 1.75rem;
+  }
+
+  .hero-label {
+    font-size: 0.7rem;
+  }
+
+  .hero-divider-vertical {
+    height: 60px;
+  }
+
+  .hydration-callout {
+    margin: 1rem 0;
+    padding: 1rem;
+  }
+
+  .hydration-label {
+    font-size: 0.8rem;
+  }
+
+  .hydration-value {
+    font-size: 1.5rem;
+  }
+
+  .hydration-meta {
+    font-size: 0.7rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .close-btn {
+    padding: 0.3rem;
+  }
+}
