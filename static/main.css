@@ -583,7 +583,8 @@ footer a:hover {
   }
 
   .hero-times-container {
-    gap: 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
   .hero-time {
@@ -596,7 +597,7 @@ footer a:hover {
   }
 
   .hero-divider-vertical {
-    height: 80px;
+    display: none;
   }
 
   .hydration-callout {
@@ -659,7 +660,8 @@ footer a:hover {
   }
 
   .hero-times-container {
-    gap: 0.75rem;
+    flex-direction: column;
+    gap: 1.25rem;
   }
 
   .hero-time {
@@ -671,7 +673,7 @@ footer a:hover {
   }
 
   .hero-divider-vertical {
-    height: 60px;
+    display: none;
   }
 
   .hydration-callout {
