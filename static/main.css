@@ -61,8 +61,13 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  padding: 1.5rem;
+  padding: 0;
+  margin: 0;
   transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 h1, h2, h3 {
@@ -76,7 +81,7 @@ h1, h2, h3 {
 }
 
 main, .container {
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -84,13 +89,18 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 h1 {
   font-size: 1.8rem;
   letter-spacing: -0.5px;
+  margin: 0;
 }
 
 .header-controls {
@@ -267,8 +277,8 @@ h1 {
 }
 
 .hero {
-  margin: 2.5rem 0;
-  padding: 2.5rem;
+  margin: 1rem;
+  padding: 2rem 1.5rem;
   text-align: center;
   background-color: var(--bg-secondary);
   border-radius: 16px;
@@ -310,8 +320,8 @@ h1 {
 }
 
 .hydration-callout {
-  margin: 2rem 0;
-  padding: 2rem;
+  margin: 1rem;
+  padding: 2rem 1.5rem;
   background-color: var(--bg-secondary);
   border-radius: 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -544,8 +554,8 @@ h1 {
 }
 
 footer {
-  margin-top: 4rem;
-  padding-top: 2rem;
+  margin-top: 3rem;
+  padding: 2rem 1.5rem;
   border-top: 1px solid var(--border);
   color: var(--text-secondary);
   font-size: 0.85rem;
@@ -566,7 +576,7 @@ footer a:hover {
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
   body {
-    padding: 1rem;
+    padding: 0;
   }
 
   main, .container {
@@ -578,7 +588,7 @@ footer a:hover {
   }
 
   .hero {
-    margin: 1.5rem 0;
+    margin: 1rem;
     padding: 1.5rem;
   }
 
@@ -647,7 +657,7 @@ footer a:hover {
 
 @media (max-width: 480px) {
   body {
-    padding: 0.75rem;
+    padding: 0;
   }
 
   h1 {
