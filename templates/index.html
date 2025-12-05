@@ -7,191 +7,64 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Sawm" />
     <meta name="theme-color" content="#ffffff" />
-    <meta name="description" content="Sawm - Prayer times and hydration recommendations for fasting" />
+    <meta name="description" content="Sawm - Prayer times" />
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" />
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
-    <title>Sawm - Fasting Companion</title>
+    <title>Sawm</title>
 </head>
 <body>
     <div class="app-container">
-        <!-- Header -->
         <header class="header">
             <div class="header-content">
-                <div class="header-left">
-                    <h1 class="logo">🌙 Sawm</h1>
+                <h1 class="logo">Sawm</h1>
+                <div class="header-right">
                     <p class="location-display" id="locationDisplay">Riyadh, Saudi Arabia</p>
+                    <nav class="header-controls">
+                        <button class="text-btn" id="themeToggle">Theme</button>
+                        <button class="text-btn" id="settingsBtn">Settings</button>
+                    </nav>
                 </div>
-                <nav class="header-controls" aria-label="Site controls">
-                    <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
-                        <i class="bx bxs-sun" aria-hidden="true"></i>
-                    </button>
-                    <button class="icon-btn settings-btn" id="settingsBtn" aria-label="Open settings" title="Settings">
-                        <i class="bx bxs-cog" aria-hidden="true"></i>
-                    </button>
-                </nav>
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Tab Navigation -->
-            <div class="tab-navigation">
-                <button class="tab-btn active" data-tab="prayer-times" aria-selected="true">
-                    <i class="bx bxs-mosque"></i>
-                    <span>Prayer Times</span>
-                </button>
-                <button class="tab-btn" data-tab="hydration" aria-selected="false">
-                    <i class="bx bxs-droplet"></i>
-                    <span>Hydration</span>
-                </button>
-                <button class="tab-btn" data-tab="tracker" aria-selected="false">
-                    <i class="bx bxs-chart"></i>
-                    <span>Tracker</span>
-                </button>
-            </div>
-
-            <!-- Tab Content -->
-            <div class="tabs-container">
-                <!-- Prayer Times Tab -->
-                <div class="tab-content active" id="prayer-times" role="tabpanel">
-                    <div class="prayer-card-wrapper">
-                        <div class="prayer-card suhoor-card">
-                            <div class="prayer-card-header">
-                                <div class="prayer-icon">🌃</div>
-                                <h2>Suhoor</h2>
-                            </div>
-                            <div class="prayer-time-display">
-                                <time class="prayer-time">{{ suhoor }}</time>
-                            </div>
-                            <p class="prayer-description">Pre-dawn meal</p>
-                            <div class="prayer-card-footer">
-                                <span class="time-until" id="suhoor-countdown">Time remaining</span>
-                            </div>
-                        </div>
-
-                        <div class="prayer-card iftar-card">
-                            <div class="prayer-card-header">
-                                <div class="prayer-icon">🌅</div>
-                                <h2>Iftar</h2>
-                            </div>
-                            <div class="prayer-time-display">
-                                <time class="prayer-time">{{ iftar }}</time>
-                            </div>
-                            <p class="prayer-description">Breaking the fast</p>
-                            <div class="prayer-card-footer">
-                                <span class="time-until" id="iftar-countdown">Time remaining</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Daily Progress -->
-                    <div class="progress-section">
-                        <h3>Fasting Progress</h3>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar-track">
-                                <div class="progress-bar-fill" id="fastingProgress" style="width: 0%"></div>
-                            </div>
-                            <p class="progress-text" id="progressText">0%</p>
-                        </div>
-                    </div>
+            <div class="prayer-times">
+                <div class="prayer-card">
+                    <h2>Suhoor</h2>
+                    <time class="prayer-time">{{ suhoor }}</time>
+                    <div class="countdown" id="suhoor-countdown">--:--:--</div>
                 </div>
 
-                <!-- Hydration Tab -->
-                <div class="tab-content" id="hydration" role="tabpanel">
-                    <div class="hydration-main-card">
-                        <div class="weather-info">
-                            <span class="weather-item">
-                                <i class="bx bxs-thermometer"></i>
-                                <span>{{ temp }}°C</span>
-                            </span>
-                            <span class="weather-separator">•</span>
-                            <span class="weather-item">
-                                <i class="bx bxs-droplet"></i>
-                                <span>{{ humidity }}%</span>
-                            </span>
-                        </div>
-
-                        <div class="hydration-display">
-                            <p class="hydration-label">Daily Water Intake</p>
-                            <div class="hydration-value-large">
-                                <span class="value">{{ hydration }}</span>
-                                <span class="unit">Liters</span>
-                            </div>
-                        </div>
-
-                        <div class="hydration-tips">
-                            <h3>💧 Hydration Tips</h3>
-                            <ul class="tips-list">
-                                <li>Drink water during Suhoor (pre-dawn)</li>
-                                <li>Break fast with dates and water</li>
-                                <li>Drink gradually after Iftar</li>
-                                <li>Avoid caffeinated drinks</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tracker Tab -->
-                <div class="tab-content" id="tracker" role="tabpanel">
-                    <div class="tracker-card">
-                        <h3>📊 Your Fasting Stats</h3>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <span class="stat-label">Current Streak</span>
-                                <span class="stat-value" id="currentStreak">1</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Days Fasted</span>
-                                <span class="stat-value" id="daysFasted">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Hydration Avg</span>
-                                <span class="stat-value">{{ hydration }}L</span>
-                            </div>
-                        </div>
-
-                        <div class="quick-actions">
-                            <h4>Quick Actions</h4>
-                            <button class="action-btn" id="logWater">
-                                <i class="bx bxs-water"></i> Log Water Intake
-                            </button>
-                            <button class="action-btn secondary" id="resetTracker">
-                                <i class="bx bxs-refresh"></i> Reset Today
-                            </button>
-                        </div>
-                    </div>
+                <div class="prayer-card">
+                    <h2>Iftar</h2>
+                    <time class="prayer-time">{{ iftar }}</time>
+                    <div class="countdown" id="iftar-countdown">--:--:--</div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal" role="dialog" aria-labelledby="settingsTitle" aria-modal="true">
+    <div class="modal" id="settingsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="settingsTitle">⚙️ Settings</h2>
-                <button class="close-btn" id="closeSettings" aria-label="Close settings">
-                    <i class="bx bx-x" aria-hidden="true"></i>
-                </button>
+                <h2>Settings</h2>
+                <button class="close-btn" id="closeSettings">Close</button>
             </div>
             <div class="modal-body">
                 <div class="settings-group">
-                    <label class="settings-label" for="settingsLocation">📍 Location</label>
-                    <div class="location-input-wrapper">
-                        <input type="text" id="settingsLocation" class="form-input" placeholder="City, Country" autocomplete="off" />
-                        <button class="icon-btn gps-btn" id="geolocateBtn" aria-label="Use current location" title="Use GPS">
-                            <i class="bx bxs-map" aria-hidden="true"></i>
-                        </button>
+                    <label for="settingsLocation">Location</label>
+                    <div class="input-group">
+                        <input type="text" id="settingsLocation" placeholder="City, Country" autocomplete="off" />
+                        <button id="geolocateBtn">GPS</button>
                     </div>
                 </div>
                 <div class="settings-group">
-                    <label class="settings-label" for="settingsMethod">🕌 Calculation Method</label>
-                    <select id="settingsMethod" class="form-input">
+                    <label for="settingsMethod">Calculation Method</label>
+                    <select id="settingsMethod">
                         <option value="2">Islamic Society of North America</option>
                         <option value="3">University of Islamic Sciences, Karachi</option>
                         <option value="4">Umm Al-Qura University, Makkah</option>
@@ -220,14 +93,13 @@
                         <option value="28">Darul Uloom Waqf, UK</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" id="updateLocationSettings">💾 Save Settings</button>
+                <button class="btn-primary" id="updateLocationSettings">Save</button>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
-        <p>&copy; <span id="year"></span> Sawm • Built with ❤️ by <a href="https://github.com/iamrayyaann" target="_blank" rel="noopener noreferrer">@iamrayyaann</a></p>
+        <p>Sawm <span id="year"></span></p>
     </footer>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
