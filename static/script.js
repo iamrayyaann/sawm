@@ -1,6 +1,6 @@
 /**
  * Sawm - Prayer times and hydration app
- * Minimal, modern JavaScript with accessible theme and modal handling
+ * Modern, enhanced JavaScript with tab navigation and tracking features
  */
 
 // Storage keys
@@ -21,7 +21,14 @@ const elements = {
     get settingsLocation() { return document.getElementById('settingsLocation'); },
     get settingsMethod() { return document.getElementById('settingsMethod'); },
     get updateSettingsBtn() { return document.getElementById('updateLocationSettings'); },
-    get yearEl() { return document.getElementById('year'); }
+    get yearEl() { return document.getElementById('year'); },
+    get locationDisplay() { return document.getElementById('locationDisplay'); },
+    get tabButtons() { return document.querySelectorAll('.tab-btn'); },
+    get tabContents() { return document.querySelectorAll('.tab-content'); },
+    get suhoorCountdown() { return document.getElementById('suhoor-countdown'); },
+    get iftarCountdown() { return document.getElementById('iftar-countdown'); },
+    get fastingProgress() { return document.getElementById('fastingProgress'); },
+    get progressText() { return document.getElementById('progressText'); },
 };
 
 // ========================
@@ -39,10 +46,9 @@ function applyTheme(theme) {
     elements.html.classList.toggle('dark-mode', isDark);
     updateThemeIcon(isDark);
     
-    // Update meta theme-color for mobile browsers
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) {
-        metaTheme.setAttribute('content', isDark ? '#111111' : '#ffffff');
+        metaTheme.setAttribute('content', isDark ? '#1a1735' : '#f9f8ff');
     }
 }
 
@@ -61,8 +67,37 @@ function toggleTheme() {
     
     const metaTheme = document.querySelector('meta[name="theme-color"]');
     if (metaTheme) {
-        metaTheme.setAttribute('content', isDark ? '#111111' : '#ffffff');
+        metaTheme.setAttribute('content', isDark ? '#1a1735' : '#f9f8ff');
     }
+}
+
+// ========================
+// Tab Navigation
+// ========================
+
+function switchTab(tabName) {
+    // Deactivate all tabs
+    elements.tabButtons.forEach(btn => btn.classList.remove('active'));
+    elements.tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Activate selected tab
+    const tabBtn = document.querySelector(`[data-tab="${tabName}"]`);
+    const tabContent = document.getElementById(tabName);
+    
+    if (tabBtn && tabContent) {
+        tabBtn.classList.add('active');
+        tabBtn.setAttribute('aria-selected', 'true');
+        tabContent.classList.add('active');
+    }
+}
+
+function initializeTabs() {
+    elements.tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabName = button.getAttribute('data-tab');
+            switchTab(tabName);
+        });
+    });
 }
 
 // ========================
@@ -324,10 +359,111 @@ function initializeFooter() {
     }
 }
 
+// ========================
+// Countdown & Progress
+// ========================
+
+function parseTime(timeString) {
+    // Handle format like "05:30 AM" or "05:30"
+    const parts = timeString.match(/(\d{2}):(\d{2})\s*(AM|PM)?/i);
+    if (!parts) return null;
+    
+    let hours = parseInt(parts[1], 10);
+    const minutes = parseInt(parts[2], 10);
+    const meridiem = parts[3]?.toUpperCase();
+    
+    if (meridiem === 'PM' && hours !== 12) hours += 12;
+    if (meridiem === 'AM' && hours === 12) hours = 0;
+    
+    return new Date().setHours(hours, minutes, 0, 0);
+}
+
+function formatTimeRemaining(ms) {
+    if (ms <= 0) return '0s';
+    
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    
+    if (hours > 0) return `${hours}h ${minutes}m`;
+    if (minutes > 0) return `${minutes}m ${seconds}s`;
+    return `${seconds}s`;
+}
+
+function updateCountdowns() {
+    const now = new Date();
+    
+    // Get prayer times from page content
+    const suhoorTimeText = document.querySelector('.suhoor-card .prayer-time')?.textContent;
+    const iftarTimeText = document.querySelector('.iftar-card .prayer-time')?.textContent;
+    
+    if (suhoorTimeText && elements.suhoorCountdown) {
+        const suhoorTime = parseTime(suhoorTimeText);
+        if (suhoorTime) {
+            const remaining = suhoorTime - now.getTime();
+            elements.suhoorCountdown.textContent = remaining > 0 ? formatTimeRemaining(remaining) : 'Time passed';
+        }
+    }
+    
+    if (iftarTimeText && elements.iftarCountdown) {
+        const iftarTime = parseTime(iftarTimeText);
+        if (iftarTime) {
+            const remaining = iftarTime - now.getTime();
+            elements.iftarCountdown.textContent = remaining > 0 ? formatTimeRemaining(remaining) : 'Time passed';
+            
+            // Update fasting progress
+            if (elements.fastingProgress && elements.progressText && suhoorTimeText) {
+                const suhoorTime = parseTime(suhoorTimeText);
+                if (suhoorTime) {
+                    const totalDuration = iftarTime - suhoorTime;
+                    const elapsed = now.getTime() - suhoorTime;
+                    const progress = Math.max(0, Math.min(100, (elapsed / totalDuration) * 100));
+                    
+                    elements.fastingProgress.style.width = progress + '%';
+                    elements.progressText.textContent = Math.round(progress) + '%';
+                }
+            }
+        }
+    }
+}
+
+function initializeCountdowns() {
+    updateCountdowns();
+    setInterval(updateCountdowns, 1000);
+}
+
+// ========================
+// Tracker Functions
+// ========================
+
+function initializeTracker() {
+    const logWaterBtn = document.getElementById('logWater');
+    const resetBtn = document.getElementById('resetTracker');
+    
+    if (logWaterBtn) {
+        logWaterBtn.addEventListener('click', () => {
+            alert('🎉 Great! You logged your water intake. Keep staying hydrated!');
+        });
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Reset today\'s tracker?')) {
+                localStorage.removeItem('sawm-tracker-today');
+                alert('✅ Today\'s tracker has been reset!');
+            }
+        });
+    }
+}
+
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeTheme();
     initializeMethod();
     initializeModal();
     initializeFooter();
+    initializeTabs();
+    initializeCountdowns();
+    initializeTracker();
 });
